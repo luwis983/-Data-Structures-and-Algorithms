@@ -1,0 +1,297 @@
+APPLICATION OF STACK
+#include <iostream>
+#include <stack>
+#include <cctype>
+#include <string>
+
+using namespace std;
+
+int getPrecedence(char operatorChar) {
+    if (operatorChar == '+' || operatorChar == '-') return 1;
+    if (operatorChar == '*' || operatorChar == '/') return 2;
+    return 0;
+}
+
+int performOperation(int operand1, int operand2, char operatorChar) {
+    switch (operatorChar) {
+        case '+': return operand1 + operand2;
+        case '-': return operand1 - operand2;
+        case '*': return operand1 * operand2;
+        case '/': return operand1 / operand2;
+    }
+    return 0;
+}
+
+int evaluateExpression(const string& expression) {
+    stack<int> operands;
+    stack<char> operators;
+
+    for (size_t i = 0; i < expression.length(); i++) {
+        if (expression[i] == ' ')
+            continue;
+
+        if (isdigit(expression[i])) {
+            int number = 0;
+            while (i < expression.length() && isdigit(expression[i])) {
+                number = number * 10 + (expression[i] - '0');
+                i++;
+            }
+            operands.push(number);
+            i--;
+        }
+        else if (expression[i] == '(') {
+            operators.push(expression[i]);
+        }
+        else if (expression[i] == ')') {
+            while (!operators.empty() && operators.top() != '(') {
+                int operand2 = operands.top();
+                operands.pop();
+                int operand1 = operands.top();
+                operands.pop();
+                char operatorChar = operators.top();
+                operators.pop();
+                operands.push(performOperation(operand1, operand2, operatorChar));
+            }
+            operators.pop();
+        }
+        else {
+            while (!operators.empty() && getPrecedence(operators.top()) >= getPrecedence(expression[i])) {
+                int operand2 = operands.top();
+                operands.pop();
+                int operand1 = operands.top();
+                operands.pop();
+                char operatorChar = operators.top();
+                operators.pop();
+                operands.push(performOperation(operand1, operand2, operatorChar));
+            }
+            operators.push(expression[i]);
+        }
+    }
+
+    while (!operators.empty()) {
+        int operand2 = operands.top();
+        operands.pop();
+        int operand1 = operands.top();
+        operands.pop();
+        char operatorChar = operators.top();
+        operators.pop();
+        operands.push(performOperation(operand1, operand2, operatorChar));
+    }
+
+    return operands.top();
+}
+
+int main() {
+    string inputExpression;
+    cout << "Enter an arithmetic expression (e.g., 3 + 5 * 2): ";
+    getline(cin, inputExpression);
+    cout << "The result is: " << evaluateExpression(inputExpression) << endl;
+    return 0;
+}
+    }
+
+ 
+
+    bool isEmpty() {
+
+        return queueList.empty();
+
+    }
+
+ 
+
+    int size() {
+
+        return queueList.size();
+
+    }
+
+ 
+
+    string peek() {
+
+        if (!queueList.empty()) {
+
+            return queueList.front().name + " (Ticket #" + queueList.front().ticketNumber + ")";
+
+        }
+
+        return "No one in line.";
+
+    }
+
+ 
+
+    int position(const string& nameOrTicket) {
+
+        for (int i = 0; i < queueList.size(); ++i) {
+
+            if (queueList[i].name == nameOrTicket || queueList[i].ticketNumber == nameOrTicket) {
+
+                return i + 1;
+
+            }
+
+        }
+
+        return -1;
+
+    }
+
+ 
+
+    bool hasReceivedTicket(const string& nameOrTicket) {
+
+        return receivedTickets.find(nameOrTicket) != receivedTickets.end();
+
+    }
+
+ 
+
+private:
+
+    string formatTicketNumber(int num) {
+
+        return (num < 10 ? "00" : (num < 100 ? "0" : "")) + to_string(num);
+
+    }
+
+};
+
+ 
+
+int main() {
+
+    Queue ticketQueue;
+
+    int choice;
+
+    bool menuDisplayed = false;
+
+ 
+
+    cout << "Welcome to Olivia Rodrigo's Concert Ticketing System!" << endl;
+
+ 
+
+    auto lastDequeueTime = chrono::steady_clock::now();
+
+ 
+
+    while (true) {
+
+        auto currentTime = chrono::steady_clock::now();
+
+        if (chrono::duration_cast<chrono::minutes>(currentTime - lastDequeueTime).count() >= 1) {
+
+            ticketQueue.autoDequeue();
+
+            lastDequeueTime = currentTime;
+
+            cout << "Queue size: " << ticketQueue.size() << endl;
+
+            cout << "Next in line: " << ticketQueue.peek() << endl;
+
+        }
+
+ 
+
+        if (!menuDisplayed) {
+
+            cout << "\n\t1. Enqueue a person\n\t2. Check your position in the Queue\n\t3. Exit\n";
+
+            menuDisplayed = true;
+
+        }
+
+ 
+
+        cout << "\nChoose an option: ";
+
+        cin >> choice;
+
+ 
+
+        switch (choice) {
+
+            case 1: {
+
+                string name;
+
+                cout << "Enter the name: ";
+
+                cin >> name;
+
+                ticketQueue.enqueue(name);
+
+                cout << "Queue size: " << ticketQueue.size() << endl;
+
+                break;
+
+            }
+
+            case 2: {
+
+                string nameOrTicket;
+
+                cout << "Enter your name or ticket number: ";
+
+                cin >> nameOrTicket;
+
+ 
+
+                if (ticketQueue.hasReceivedTicket(nameOrTicket)) {
+
+                    cout << nameOrTicket << " has already received a ticket." << endl;
+
+                } else {
+
+                    int pos = ticketQueue.position(nameOrTicket);
+
+                    if (pos != -1) {
+
+                        cout << nameOrTicket << " is currently at position " << pos << " in the queue.\n" << endl;
+
+                    } else {
+
+                        cout << nameOrTicket << " is not in the queue.\n" << endl;
+
+                    }
+
+                }
+
+                break;
+
+            }
+
+            case 3: {
+
+                cout << "Exiting the system. Thank you!" << endl;
+
+                return 0;
+
+            }
+
+            default: {
+
+                cout << "Invalid option. Please try agai
+
+n." << endl;
+
+                break;
+
+            }
+
+        }
+
+ 
+
+        this_thread::sleep_for(chrono::seconds(1));
+
+    }
+
+ 
+
+    return 0;
+
+}
