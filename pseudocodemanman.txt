@@ -1,0 +1,98 @@
+PSEUDOCODE DAILY ROUTINE
+Preparing for a Bath
+
+BEGIN
+
+ 
+
+Step 1: Gather Essentials
+
+    IF (soap == missing) OR (towel == missing) OR (shampoo == missing) THEN
+
+        DISPLAY "You're missing some bath essentials."
+
+        EXIT
+
+    END IF
+
+ 
+
+Step 2: Adjust Water Temperature
+
+    IF (water_temperature == too_hot) OR (water_temperature == too_cold) THEN
+
+        ADJUST water UNTIL comfortable
+
+    END IF
+
+ 
+
+Step 3: Prepare the Space
+
+    IF (towel OR clean_clothes == out_of_reach) THEN
+
+        PLACE them nearby
+
+    END IF
+
+ 
+
+Step 4: Step into the Bath
+
+    SLOWLY enter the water.
+
+    IF (water_temperature != comfortable) THEN
+
+        ADJUST it UNTIL it feels right
+
+    END IF
+
+ 
+
+Step 5: Wash Thoroughly
+
+    USE soap and shampoo to clean your body and hair.
+
+    IF (spots_on_body == missed) THEN
+
+        REWASH those areas
+
+    END IF
+
+ 
+
+Step 6: Rinse Off
+
+    ENSURE all soap and shampoo are rinsed away.
+
+    IF (soap_residue == present) THEN
+
+        RINSE again
+
+    END IF
+
+ 
+
+Step 7: Dry Off
+
+    EXIT the bath and DRY yourself with a towel.
+
+    IF (still_damp == TRUE) THEN
+
+        CONTINUE drying UNTIL dry
+
+    END IF
+
+ 
+
+Step 8: Get Dressed
+
+    WEAR fresh clothes.
+
+ 
+
+DISPLAY "mabango na naman ang hari!"
+
+ 
+
+END
