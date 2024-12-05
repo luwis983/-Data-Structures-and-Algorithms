@@ -1,0 +1,68 @@
+//kay truman na finals
+#include <iostream>
+#include <vector>
+#include <algorithm>
+ 
+using namespace std;
+ 
+
+struct Job {
+    int startTime;
+    int endTime;
+    int profit;
+};
+ 
+
+int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& profit) {
+    int n = startTime.size();
+    vector<Job> jobs(n);
+    
+    
+    for (int i = 0; i < n; ++i) {
+        jobs[i] = {startTime[i], endTime[i], profit[i]};
+    }
+    
+    
+    sort(jobs.begin(), jobs.end(), [](const Job& a, const Job& b) {
+        return a.endTime < b.endTime;
+    });
+ 
+    vector<int> dp(n);
+    dp[0] = jobs[0].profit; 
+ 
+    for (int i = 1; i < n; ++i) {
+        
+        int includeProfit = jobs[i].profit;
+ 
+       
+        int lastNonConflict = -1;
+        for (int j = i - 1; j >= 0; --j) {
+            if (jobs[j].endTime <= jobs[i].startTime) {
+                lastNonConflict = j;
+                break;
+            }
+        }
+        
+        
+        if (lastNonConflict != -1) {
+            includeProfit += dp[lastNonConflict];
+        }
+ 
+       
+        dp[i] = max(includeProfit, dp[i - 1]);
+    }
+ 
+   
+    return dp[n - 1];
+}
+ 
+int main() {
+    vector<int> startTime = {1, 2, 3, 3};
+    vector<int> endTime = {3, 4, 5, 6};
+    vector<int> profit = {50, 10, 40, 70};
+ 
+    int maxProfit = jobScheduling(startTime, endTime, profit);
+    cout << "Maximum Profit: " << maxProfit << endl; 
+ 
+    return 0;
+}
